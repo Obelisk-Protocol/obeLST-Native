@@ -1,4 +1,4 @@
-# obe-sol-native Solana Stake Pool Program
+# obeSOL LST - Solana Stake Pool Program
 
 This is a Solana program implementing a simplified native stake pool. It allows users to stake SOL, receive pool tokens (obeSOL), and earn staking rewards. The pool delegates the staked SOL to a single, pre-defined validator.
 
