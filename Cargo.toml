@@ -1,0 +1,38 @@
+[package]
+name = "obe-sol-native"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "obe_sol"
+
+[features]
+no-entrypoint = []
+test-sbf = []
+
+[dependencies]
+solana-program = "1.17"
+thiserror = "1.0"
+num-derive = "0.4"
+num-traits = "0.2"
+borsh = "0.10"
+borsh-derive = "0.10"
+spl-token = { version = "4.0", features = ["no-entrypoint"] }
+spl-associated-token-account = { version = "2.0", features = ["no-entrypoint"] }
+# spl-stake-pool = { version = "^0.7", features = ["no-entrypoint"] } # Removed - Not needed for native implementation
+
+[dev-dependencies]
+solana-program-test = "1.17"
+solana-sdk = "1.17"
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+[profile.release.build-override]
+opt-level = 3
+incremental = false
+codegen-units = 1
