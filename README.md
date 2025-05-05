@@ -52,6 +52,31 @@ Interaction with the program typically involves sending transactions with specif
 
 *(Refer to `src/instruction.rs` for the precise account lists required for each instruction)*
 
+## ⚙️ Customization for Deployment
+
+If you are forking this repository to deploy your own instance of the stake pool, here are the key areas you'll need to configure or modify:
+
+1.  **Program Code (`processor.rs`):**
+    *   **Stake Pool Seed:** In the `process_initialize` function, locate the `poolSeedString` constant (e.g., `"obelisk_pool_04"`). **Change this string** to something unique for your pool. This is crucial to ensure your pool's PDA (Program Derived Address) doesn't conflict with others.
+
+2.  **Initialization Parameters (Client-Side):**
+    *   When you call the `Initialize` instruction (likely from a script or frontend), you need to provide specific parameters:
+        *   `name`: The desired name for *your* stake pool (e.g., "My Awesome Pool").
+        *   `fee_percentage`: Set your desired fee (0-100).
+        *   `helius_validator_vote` (Instruction Data): **Crucially, replace this** with the vote account public key of the **validator you choose** to delegate stake to. Do not use the default Helius one unless that's your specific intention.
+        *   `treasury_fee_account` (Account): Provide the public key of the account where you want collected fees to go.
+        *   `authority` (Account & Signer): The keypair signing the `Initialize` transaction becomes the pool's initial authority. Ensure you use the keypair you intend to control the pool.
+
+3.  **Metadata (`Cargo.toml`):**
+    *   Consider updating the `name`, `version`, `authors`, etc., in `programs/obe-sol-native/Cargo.toml` to reflect your project.
+
+4.  **Deployment & Integration:**
+    *   **Program ID:** After deploying using `cargo build-sbf` and `solana program deploy`, note the **new Program ID**. Any client application or SDK interacting with your pool *must* use this new ID.
+    *   **Client Code:** Update any frontend or associated scripts/SDKs with the new Program ID, the addresses of the deployed pool account and token mint (generated during initialization), and any desired token metadata (symbol, icon) for display purposes.
+
+5.  **Documentation (`README.md`):**
+    *   Update this README file itself! Change titles, descriptions, token names (e.g., replace "obeSOL"), and any specific details to match your deployed pool.
+
 ## 📜 License
 
 This program uses the MIT License (as specified in `Cargo.toml`). 
